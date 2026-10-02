@@ -1,0 +1,34 @@
+<div class="site-shell">
+  <app-header (registerClick)="registerParent()" />
+
+  <main>
+    <app-hero
+      (registerClick)="registerParent()"
+      (addPlayerClick)="guideProtectedAction('player')"
+      (payClick)="guideProtectedAction('payment')"
+    />
+
+    <section class="content-stage">
+      <app-steps />
+
+      <div class="program-registration-grid">
+        <app-programs (programSelected)="selectProgram($event)" />
+        <app-quick-registration
+          [selectedProgramId]="selectedProgramId()"
+          (notice)="showToast($event)"
+        />
+      </div>
+
+      <app-benefits />
+    </section>
+  </main>
+
+  <app-footer />
+
+  @if (toastMessage()) {
+    <div class="toast" role="status" aria-live="polite">
+      <span class="toast__dot"></span>
+      {{ toastMessage() }}
+    </div>
+  }
+</div>

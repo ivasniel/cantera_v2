@@ -1,0 +1,27 @@
+<section class="programs" id="programs">
+  <div class="section-head">
+    <div>
+      <h2>Our Programs</h2>
+      <p>Development programs for every age and skill level.</p>
+    </div>
+    <button type="button">View All Programs <span>→</span></button>
+  </div>
+
+  <div class="cards">
+    @for (program of programs(); track program.id) {
+      <article class="program-card" tabindex="0" (click)="programSelected.emit(program.id)" (keydown.enter)="programSelected.emit(program.id)">
+        <div class="program-card__image">
+          <img [src]="program.image" [alt]="program.title + ' youth soccer program'">
+          <span class="age">{{ program.ageRange }}</span>
+        </div>
+        <div class="program-card__body">
+          <div>
+            <h3>{{ program.title }}</h3>
+            <p>{{ program.description }}</p>
+          </div>
+          <button class="circle-arrow" type="button" [attr.aria-label]="'Select ' + program.title">→</button>
+        </div>
+      </article>
+    }
+  </div>
+</section>

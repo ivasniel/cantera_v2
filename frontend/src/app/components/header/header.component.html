@@ -1,0 +1,33 @@
+<header class="header-wrap">
+  <nav class="nav-shell" aria-label="Main navigation">
+    <button class="brand" type="button" aria-label="La Cantera Soccer Academy home" (click)="scrollTo('home')">
+      <img src="assets/images/logo.png" alt="La Cantera Soccer Academy logo">
+    </button>
+
+    <div class="nav-links" [class.nav-links--open]="menuOpen()">
+      <button class="active" type="button" (click)="scrollTo('home')">Home</button>
+      <button type="button" (click)="scrollTo('about')">About</button>
+      <button type="button" (click)="scrollTo('programs')">Programs</button>
+      <button type="button" (click)="scrollTo('gallery')">Gallery</button>
+      <button type="button" (click)="scrollTo('contact')">Contact</button>
+    </div>
+
+    <div class="nav-actions">
+      <button class="small-action small-action--search" type="button" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+        <span>Search</span>
+      </button>
+      <button class="small-action" type="button" aria-label="Login">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5.5 20c.7-4 3-6 6.5-6s5.8 2 6.5 6"></path></svg>
+        <span>Login</span>
+      </button>
+      <button class="register-btn" type="button" (click)="registerClick.emit()">
+        Register Now
+        <span aria-hidden="true">→</span>
+      </button>
+      <button class="menu-btn" type="button" aria-label="Toggle menu" [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>

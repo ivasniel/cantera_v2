@@ -1,0 +1,21 @@
+:root {
+  color-scheme: light;
+  --navy: #0b2d55;
+  --red: #ef2934;
+  --green: #19b85a;
+  --blue: #2678ea;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f7f9fc;
+  color: #16324f;
+  font-family: 'Inter', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+::selection { background: #ff3038; color: #fff; }

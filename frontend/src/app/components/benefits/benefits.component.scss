@@ -1,0 +1,15 @@
+.benefits { padding: 10px 0 4px; margin-top: 8px; scroll-margin-top: 100px; }
+.benefits h2 { margin: 0 0 8px; color: #0b2d55; font: 900 22px/1.1 'Nunito Sans', sans-serif; }
+
+.benefit-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.benefit-grid article { display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: 9px; }
+.ico { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 50%; font-size: 13px; font-weight: 900; letter-spacing: -3px; }
+.ico--red { color: #ef2a34; background: #ffeaec; }
+.ico--blue { color: #2275e8; background: #e5f0ff; font-size: 22px; letter-spacing: 0; }
+.ico--green { color: #1ca556; background: #e4f7ec; font-size: 22px; letter-spacing: 0; }
+.ico--navy { color: #0e315b; background: #e8eef5; }
+.benefit-grid h3 { margin: 0 0 3px; color: #102e54; font-size: 12px; }
+.benefit-grid p { margin: 0; color: #60758a; font-size: 11px; line-height: 1.28; }
+
+@media (max-width: 1050px) { .benefit-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 650px) { .benefit-grid { grid-template-columns: 1fr; } .benefits { padding-top: 18px; } }

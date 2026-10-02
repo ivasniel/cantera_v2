@@ -1,0 +1,42 @@
+<section class="registration-card" id="registration">
+  <div class="registration-card__header">
+    <div class="ball-mark" aria-hidden="true"></div>
+    <h2>Quick Registration</h2>
+    <p>Get started in less than 2 minutes.</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="progress-dots" aria-hidden="true">
+      <span class="bar"></span><span></span><span></span><span></span>
+    </div>
+
+    <label class="input-wrap" [class.invalid]="invalid('fullName')">
+      <span class="icon">♙</span>
+      <input type="text" formControlName="fullName" autocomplete="name" placeholder="Parent Full Name" aria-label="Parent full name">
+    </label>
+
+    <label class="input-wrap" [class.invalid]="invalid('email')">
+      <span class="icon">✉</span>
+      <input type="email" formControlName="email" autocomplete="email" placeholder="Email Address" aria-label="Email address">
+    </label>
+
+    <label class="input-wrap" [class.invalid]="invalid('phone')">
+      <span class="icon">☎</span>
+      <input type="tel" formControlName="phone" autocomplete="tel" placeholder="Phone Number" aria-label="Phone number">
+    </label>
+
+    @if (selectedProgramId) {
+      <div class="selected-program">Program selected: <strong>{{ selectedProgramId }}</strong></div>
+    }
+
+    <button class="submit-btn" type="submit" [disabled]="submitting()">
+      @if (submitting()) { Sending... } @else { Create Parent Account <span>→</span> }
+    </button>
+
+    @if (success()) {
+      <p class="success-message">Information received successfully.</p>
+    }
+
+    <p class="login-note">Already have an account? <a href="#" (click)="$event.preventDefault()">Login here</a></p>
+  </form>
+</section>
