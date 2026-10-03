@@ -1,0 +1,555 @@
+<div class="account-page">
+
+
+  <!-- HEADER -->
+
+  <header class="page-header">
+
+    <div>
+
+      <span>
+        ADMIN ACCOUNT
+      </span>
+
+      <h1>
+        My Account
+      </h1>
+
+      <p>
+        Manage your personal information
+        and account security.
+      </p>
+
+    </div>
+
+  </header>
+
+
+
+  <div class="account-grid">
+
+
+    <!-- =====================================
+         PROFILE
+    ====================================== -->
+
+    <section class="account-card">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <span>
+            PERSONAL INFORMATION
+          </span>
+
+          <h2>
+            Profile
+          </h2>
+
+        </div>
+
+
+        @if (!editingProfile()) {
+
+          <button
+            class="edit-button"
+            type="button"
+            (click)="startEdit()"
+          >
+            Edit Information
+          </button>
+
+        }
+
+      </div>
+
+
+
+      <!-- AVATAR -->
+
+      <div class="profile-summary">
+
+        <div class="profile-avatar">
+
+          {{ auth.initials() }}
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            {{ auth.user()?.fullName }}
+          </strong>
+
+          <span>
+            Administrator
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      @if (!editingProfile()) {
+
+
+        <!-- VIEW -->
+
+        <div class="profile-details">
+
+          <div>
+
+            <span>
+              FULL NAME
+            </span>
+
+            <strong>
+              {{ auth.user()?.fullName }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              EMAIL
+            </span>
+
+            <strong>
+              {{ auth.user()?.email }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              PHONE
+            </span>
+
+            <strong>
+              {{
+                auth.user()?.phone ||
+                'Not provided'
+              }}
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>
+              ROLE
+            </span>
+
+            <strong>
+              Administrator
+            </strong>
+
+          </div>
+
+        </div>
+
+
+      } @else {
+
+
+        <!-- EDIT -->
+
+        <div class="profile-form">
+
+          <div class="form-field">
+
+            <label>
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              [(ngModel)]="
+                profile.fullName
+              "
+            >
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label>
+              Email
+            </label>
+
+            <input
+              type="email"
+              [(ngModel)]="
+                profile.email
+              "
+            >
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label>
+              Phone
+            </label>
+
+            <input
+              type="tel"
+              [(ngModel)]="
+                profile.phone
+              "
+            >
+
+          </div>
+
+
+          <div class="form-actions">
+
+            <button
+              class="cancel-button"
+              type="button"
+              (click)="cancelEdit()"
+            >
+              Cancel
+            </button>
+
+
+            <button
+              class="save-button"
+              type="button"
+              (click)="saveProfile()"
+            >
+              Save Changes
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      @if (profileSaved()) {
+
+        <div class="success-message">
+
+          <span>
+            ✓
+          </span>
+
+          Account information updated.
+
+        </div>
+
+      }
+
+    </section>
+
+
+
+    <!-- =====================================
+         SECURITY
+    ====================================== -->
+
+    <section class="account-card">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <span>
+            SECURITY
+          </span>
+
+          <h2>
+            Password
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="security-row">
+
+        <div class="security-icon">
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <rect
+              x="5"
+              y="10"
+              width="14"
+              height="10"
+              rx="2"
+            ></rect>
+
+            <path
+              d="M8 10V7a4 4 0 0 1 8 0v3"
+            ></path>
+          </svg>
+
+        </div>
+
+
+        <div class="security-content">
+
+          <strong>
+            Account Password
+          </strong>
+
+          <span>
+            Keep your administrator
+            account secure.
+          </span>
+
+        </div>
+
+
+        <button
+          class="password-button"
+          type="button"
+          (click)="openPassword()"
+        >
+          Change Password
+        </button>
+
+      </div>
+
+
+      @if (passwordSaved()) {
+
+        <div class="success-message">
+
+          <span>
+            ✓
+          </span>
+
+          Password updated successfully.
+
+        </div>
+
+      }
+
+    </section>
+
+
+
+    <!-- =====================================
+         ACCOUNT STATUS
+    ====================================== -->
+
+    <section
+      class="account-card account-card--full"
+    >
+
+      <div class="card-header">
+
+        <div>
+
+          <span>
+            ACCOUNT STATUS
+          </span>
+
+          <h2>
+            Administrator Access
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="status-row">
+
+        <div>
+
+          <strong>
+            Account Active
+          </strong>
+
+          <p>
+            Your administrator account currently
+            has access to the La Cantera management
+            system.
+          </p>
+
+        </div>
+
+
+        <span class="active-badge">
+          ACTIVE
+        </span>
+
+      </div>
+
+
+      <div class="account-note">
+
+        Your own administrator account cannot be
+        deactivated from this page. Another active
+        administrator must manage your account
+        from Admin Users.
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <!-- =====================================
+       PASSWORD MODAL
+  ====================================== -->
+
+  @if (showPassword()) {
+
+    <div
+      class="modal-backdrop"
+      (click)="closePassword()"
+    >
+
+      <div
+        class="password-modal"
+        (click)="
+          $event.stopPropagation()
+        "
+      >
+
+        <span class="modal-label">
+          SECURITY
+        </span>
+
+        <h2>
+          Change Password
+        </h2>
+
+        <p>
+          Enter your current password
+          and choose a new one.
+        </p>
+
+
+        <div class="modal-form">
+
+          <div class="form-field">
+
+            <label>
+              Current Password
+            </label>
+
+            <input
+              type="password"
+              autocomplete="current-password"
+              [(ngModel)]="
+                currentPassword
+              "
+            >
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label>
+              New Password
+            </label>
+
+            <input
+              type="password"
+              autocomplete="new-password"
+              [(ngModel)]="
+                newPassword
+              "
+            >
+
+            <small>
+              Minimum 6 characters
+            </small>
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label>
+              Confirm New Password
+            </label>
+
+            <input
+              type="password"
+              autocomplete="new-password"
+              [(ngModel)]="
+                confirmPassword
+              "
+            >
+
+          </div>
+
+        </div>
+
+
+        @if (
+          newPassword &&
+          confirmPassword &&
+          newPassword !==
+            confirmPassword
+        ) {
+
+          <div class="password-error">
+
+            Passwords do not match.
+
+          </div>
+
+        }
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel-button"
+            type="button"
+            (click)="closePassword()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="save-button"
+            type="button"
+            [disabled]="
+              !currentPassword ||
+              newPassword.length < 6 ||
+              newPassword !==
+                confirmPassword
+            "
+            (click)="changePassword()"
+          >
+            Change Password
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

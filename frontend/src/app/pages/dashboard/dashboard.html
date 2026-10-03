@@ -1,0 +1,657 @@
+<app-header></app-header>
+<div class="dashboard-page">
+
+  <main class="dashboard-container">
+
+    <section class="dashboard-hero">
+
+      <div class="dashboard-hero__glow dashboard-hero__glow--one"></div>
+      <div class="dashboard-hero__glow dashboard-hero__glow--two"></div>
+
+      <!-- WELCOME -->
+      <section class="dashboard-welcome">
+
+        <div>
+          <span>
+            PARENT DASHBOARD
+          </span>
+
+          <h1>
+            Welcome back,
+            {{ auth.user()?.fullName }}.
+          </h1>
+
+          <p>
+            Manage your players, account and
+            payments from one place.
+          </p>
+        </div>
+
+        <button
+          class="logout-button"
+          type="button"
+          (click)="logout()"
+        >
+          Log Out
+        </button>
+
+      </section>
+
+
+      <!-- ACTION NEEDED -->
+      @if (!hasPaymentMethod()) {
+
+        <section class="action-card">
+
+          <div class="action-card__icon">
+            !
+          </div>
+
+          <div class="action-card__content">
+
+            <span>
+              ACTION NEEDED
+            </span>
+
+            <h2>
+              Payment method not configured
+            </h2>
+
+            <p>
+              Add a payment method to make future
+              payments faster and easier.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            (click)="setupPayment()"
+          >
+            Set Up Payment
+            <span>→</span>
+          </button>
+
+        </section>
+
+      } @else {
+
+        <section class="good-card">
+
+          <span>✓</span>
+
+          <div>
+
+            <strong>
+              Everything looks good.
+            </strong>
+
+            <p>
+              No action is needed right now.
+            </p>
+
+          </div>
+
+        </section>
+
+      }
+
+
+      <!-- SUMMARY -->
+      <section class="summary-grid">
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            PLAYERS
+          </span>
+
+          <strong>
+            {{ players().length }}
+          </strong>
+
+          <p>
+            Registered players
+          </p>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            PAYMENT METHOD
+          </span>
+
+          <strong class="summary-text">
+
+            @if (hasPaymentMethod()) {
+              Configured
+            } @else {
+              Not Set
+            }
+
+          </strong>
+
+          <p>
+            Billing information
+          </p>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <span class="summary-label">
+            LAST PAYMENT
+          </span>
+
+          <strong class="summary-text">
+            $125.00
+          </strong>
+
+          <p>
+            September 1, 2026
+          </p>
+
+        </article>
+
+      </section>
+
+    </section>
+
+    <!-- resto del dashboard sigue debajo -->
+
+
+    <!-- PLAYERS -->
+
+    <section class="dashboard-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <span>
+            MY PLAYERS
+          </span>
+
+          <h2>
+            Players
+          </h2>
+
+        </div>
+
+
+        <a
+          class="add-button"
+          routerLink="/register"
+        >
+          + Add Player
+        </a>
+
+      </div>
+
+
+      <div class="players-grid">
+
+        @for (
+          player of players();
+          track player.id
+        ) {
+
+          <article class="player-card">
+
+
+            <div class="player-card__top">
+
+              <div class="player-avatar">
+
+                {{
+                  player.firstName.charAt(0)
+                }}
+
+              </div>
+
+
+              <div class="player-title">
+
+                <span>
+                  {{ player.program }}
+                </span>
+
+                <h3>
+                  {{ player.firstName }}
+                  {{ player.lastName }}
+                </h3>
+
+              </div>
+
+
+              <span class="status">
+                {{ player.status }}
+              </span>
+
+            </div>
+
+
+
+            @if (
+              editingPlayerId()
+                !== player.id
+            ) {
+
+              <div class="player-details">
+
+                <div>
+
+                  <span>
+                    DATE OF BIRTH
+                  </span>
+
+                  <strong>
+                    {{ player.birthDate }}
+                  </strong>
+
+                </div>
+
+
+                <div>
+
+                  <span>
+                    PROGRAM
+                  </span>
+
+                  <strong>
+                    {{ player.program }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <button
+                class="edit-button"
+                type="button"
+                (click)="editPlayer(player.id)"
+              >
+                Edit Player
+              </button>
+
+            } @else {
+
+              <div class="player-edit">
+
+                <div class="form-field">
+
+                  <label>
+                    First Name
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="player.firstName"
+                  >
+
+                </div>
+
+
+                <div class="form-field">
+
+                  <label>
+                    Last Name
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="player.lastName"
+                  >
+
+                </div>
+
+
+                <div class="form-field">
+
+                  <label>
+                    Date of Birth
+                  </label>
+
+                  <input
+                    type="date"
+                    [(ngModel)]="player.birthDate"
+                  >
+
+                </div>
+
+
+                <button
+                  class="save-button"
+                  type="button"
+                  (click)="savePlayer()"
+                >
+                  Save Changes
+                </button>
+
+              </div>
+
+            }
+            </article>
+          }
+
+      </div>
+
+    </section>
+
+
+
+    <!-- TWO COLUMNS -->
+
+    <div class="dashboard-columns">
+
+
+      <!-- ACCOUNT -->
+
+      <section class="dashboard-section account-section">
+
+        <div class="section-header">
+
+          <div>
+
+            <span>
+              MY ACCOUNT
+            </span>
+
+            <h2>
+              Personal Information
+            </h2>
+
+          </div>
+
+
+          @if (!editingProfile()) {
+
+            <button
+              class="text-button"
+              type="button"
+              (click)="editingProfile.set(true)"
+            >
+              Edit
+            </button>
+
+          }
+
+        </div>
+
+
+        @if (!editingProfile()) {
+
+          <div class="account-info">
+
+            <div>
+
+              <span>
+                NAME
+              </span>
+
+              <strong>
+                {{ profile.name }}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                EMAIL
+              </span>
+
+              <strong>
+                {{ profile.email }}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                PHONE
+              </span>
+
+              <strong>
+                {{ profile.phone }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        } @else {
+
+          <div class="profile-form">
+
+            <div class="form-field">
+
+              <label>
+                Name
+              </label>
+
+              <input
+                [(ngModel)]="profile.name"
+              >
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Email
+              </label>
+
+              <input
+                type="email"
+                [(ngModel)]="profile.email"
+              >
+
+            </div>
+
+
+            <div class="form-field">
+
+              <label>
+                Phone
+              </label>
+
+              <input
+                [(ngModel)]="profile.phone"
+              >
+
+            </div>
+
+
+            <button
+              class="save-button"
+              type="button"
+              (click)="saveProfile()"
+            >
+              Save Changes
+            </button>
+
+          </div>
+
+        }
+
+
+        <div class="password-row">
+
+          <div>
+
+            <strong>
+              Password
+            </strong>
+
+            <span>
+              Change your account password.
+            </span>
+
+          </div>
+
+          <button
+            type="button"
+            (click)="passwordMode.set(true)"
+          >
+            Change Password
+          </button>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- PAYMENT METHOD -->
+
+      <section class="dashboard-section">
+
+        <div class="section-header">
+
+          <div>
+
+            <span>
+              BILLING
+            </span>
+
+            <h2>
+              Payment Method
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        @if (hasPaymentMethod()) {
+
+          <div class="credit-card">
+
+            <span>
+              PAYMENT METHOD
+            </span>
+
+            <strong>
+              VISA •••• 4242
+            </strong>
+
+            <small>
+              Expires 08/29
+            </small>
+
+          </div>
+
+
+          <button
+            class="edit-button"
+            type="button"
+          >
+            Manage Payment Method
+          </button>
+
+        } @else {
+
+          <div class="no-payment">
+
+            <div>
+              💳
+            </div>
+
+            <h3>
+              No payment method
+            </h3>
+
+            <p>
+              Add a card when you're ready.
+            </p>
+
+            <button
+              type="button"
+              (click)="setupPayment()"
+            >
+              Add Payment Method
+            </button>
+
+          </div>
+
+        }
+
+      </section>
+
+    </div>
+
+
+
+    <!-- PAYMENT HISTORY -->
+
+    <section class="dashboard-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <span>
+            BILLING HISTORY
+          </span>
+
+          <h2>
+            Payments
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="payments-table">
+
+        @for (
+          payment of payments();
+          track payment.id
+        ) {
+
+          <div class="payment-row">
+
+            <div>
+
+              <strong>
+                {{ payment.description }}
+              </strong>
+
+              <span>
+                {{ payment.date }}
+              </span>
+
+            </div>
+
+
+            <strong>
+              ${{ payment.amount }}.00
+            </strong>
+
+
+            <span class="paid">
+              ✓ {{ payment.status }}
+            </span>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+</div>

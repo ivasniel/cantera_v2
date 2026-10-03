@@ -1,26 +1,35 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal
+} from '@angular/core';
+
+import {
+  RouterLink,
+  RouterLinkActive
+} from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
+  imports: [
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  @Output() readonly registerClick = new EventEmitter<void>();
+
   readonly menuOpen = signal(false);
 
   toggleMenu(): void {
-    this.menuOpen.update((value) => !value);
+    this.menuOpen.update(value => !value);
   }
 
   closeMenu(): void {
     this.menuOpen.set(false);
   }
 
-  scrollTo(id: string): void {
-    this.closeMenu();
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
 }

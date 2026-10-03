@@ -1,0 +1,726 @@
+<div class="admins-page">
+
+
+  <header class="page-header">
+
+    <div>
+
+      <span>
+        SYSTEM ACCESS
+      </span>
+
+      <h1>
+        Admin Users
+      </h1>
+
+      <p>
+        Manage who has administrative access
+        to La Cantera.
+      </p>
+
+    </div>
+
+
+    <button
+      class="add-admin-button"
+      type="button"
+      (click)="openAddAdmin()"
+    >
+      + Add Admin
+    </button>
+
+  </header>
+
+
+
+  <!-- FILTERS -->
+
+  <section class="admins-toolbar">
+
+    <div class="search-box">
+
+      <svg viewBox="0 0 24 24">
+        <circle
+          cx="11"
+          cy="11"
+          r="6.5"
+        ></circle>
+
+        <path
+          d="m16 16 4 4"
+        ></path>
+      </svg>
+
+
+      <input
+        type="search"
+        placeholder="Search admin..."
+        (input)="
+          setSearch(
+            $any($event.target).value
+          )
+        "
+      >
+
+    </div>
+
+
+    <div class="status-filters">
+
+      <button
+        type="button"
+        [class.active]="
+          statusFilter() === 'ALL'
+        "
+        (click)="setStatus('ALL')"
+      >
+        All
+      </button>
+
+
+      <button
+        type="button"
+        [class.active]="
+          statusFilter() === 'ACTIVE'
+        "
+        (click)="setStatus('ACTIVE')"
+      >
+        Active
+      </button>
+
+
+      <button
+        type="button"
+        [class.active]="
+          statusFilter() === 'INACTIVE'
+        "
+        (click)="setStatus('INACTIVE')"
+      >
+        Inactive
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- TABLE -->
+
+  <section class="admins-panel">
+
+
+    <div class="admins-table__header">
+
+      <span>
+        ADMIN
+      </span>
+
+      <span>
+        EMAIL
+      </span>
+
+      <span>
+        PHONE
+      </span>
+
+      <span>
+        STATUS
+      </span>
+
+      <span>
+        ACTIONS
+      </span>
+
+    </div>
+
+
+
+    @for (
+      admin of paginatedAdmins();
+      track admin.id
+    ) {
+
+      <div class="admin-record">
+
+
+        @if (
+          editingAdminId() !==
+          admin.id
+        ) {
+
+          <div class="admin-row">
+
+
+            <div class="admin-name">
+
+              <div class="admin-avatar">
+
+                {{
+                  admin.fullName
+                    .split(' ')
+                    .slice(0, 2)
+                    .map(part => part.charAt(0))
+                    .join('')
+                }}
+
+              </div>
+
+
+              <div>
+
+                <strong>
+                  {{ admin.fullName }}
+                </strong>
+
+
+                @if (
+                  isCurrentAdmin(admin)
+                ) {
+
+                  <span class="you-label">
+                    YOU
+                  </span>
+
+                }
+
+              </div>
+
+            </div>
+
+
+
+            <span>
+              {{ admin.email }}
+            </span>
+
+
+            <span>
+              {{ admin.phone || '—' }}
+            </span>
+
+
+
+            <span
+              class="status-badge"
+              [class.status-badge--inactive]="
+                admin.status === 'INACTIVE'
+              "
+            >
+              {{ admin.status }}
+            </span>
+
+
+
+            <div class="admin-actions">
+
+              <button
+                type="button"
+                class="edit-button"
+                (click)="
+                  editAdmin(admin.id)
+                "
+              >
+                Edit
+              </button>
+
+
+              <button
+                type="button"
+                class="password-button"
+                (click)="
+                  openPassword(admin)
+                "
+              >
+                Password
+              </button>
+
+
+              @if (
+                admin.status ===
+                'ACTIVE'
+              ) {
+
+                <button
+                  type="button"
+                  class="deactivate-button"
+                  [disabled]="
+                    isCurrentAdmin(admin)
+                  "
+                  (click)="
+                    requestDeactivate(admin)
+                  "
+                >
+                  Deactivate
+                </button>
+
+              } @else {
+
+                <button
+                  type="button"
+                  class="reactivate-button"
+                  (click)="
+                    reactivate(admin)
+                  "
+                >
+                  Reactivate
+                </button>
+
+              }
+
+            </div>
+
+          </div>
+
+        } @else {
+
+
+          <!-- EDIT -->
+
+          <div class="admin-edit-row">
+
+            <div class="edit-field">
+
+              <label>
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                [(ngModel)]="
+                  admin.fullName
+                "
+              >
+
+            </div>
+
+
+            <div class="edit-field">
+
+              <label>
+                Email
+              </label>
+
+              <input
+                type="email"
+                [(ngModel)]="
+                  admin.email
+                "
+              >
+
+            </div>
+
+
+            <div class="edit-field">
+
+              <label>
+                Phone
+              </label>
+
+              <input
+                type="text"
+                [(ngModel)]="
+                  admin.phone
+                "
+              >
+
+            </div>
+
+
+            <div class="edit-actions">
+
+              <button
+                type="button"
+                class="cancel-button"
+                (click)="
+                  editingAdminId.set(null)
+                "
+              >
+                Cancel
+              </button>
+
+
+              <button
+                type="button"
+                class="save-button"
+                (click)="
+                  saveAdmin(admin)
+                "
+              >
+                Save Changes
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    } @empty {
+
+      <div class="empty-state">
+
+        <h3>
+          No admins found
+        </h3>
+
+        <p>
+          Try another search or filter.
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- PAGINATION -->
+
+    @if (
+      filteredAdmins().length > 0
+    ) {
+
+      <div class="pagination">
+
+        <span>
+
+          Showing
+          <strong>
+            {{ firstResult() }}
+          </strong>
+          –
+          <strong>
+            {{ lastResult() }}
+          </strong>
+          of
+          <strong>
+            {{ filteredAdmins().length }}
+          </strong>
+
+        </span>
+
+
+        <div>
+
+          <button
+            type="button"
+            [disabled]="page() === 1"
+            (click)="previousPage()"
+          >
+            ←
+          </button>
+
+
+          @for (
+            pageNumber of pageNumbers();
+            track pageNumber
+          ) {
+
+            <button
+              type="button"
+              [class.active]="
+                page() === pageNumber
+              "
+              (click)="
+                goToPage(pageNumber)
+              "
+            >
+              {{ pageNumber }}
+            </button>
+
+          }
+
+
+          <button
+            type="button"
+            [disabled]="
+              page() === totalPages()
+            "
+            (click)="nextPage()"
+          >
+            →
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+
+
+  <!-- ADD ADMIN MODAL -->
+
+  @if (
+    showAddAdmin()
+  ) {
+
+    <div
+      class="modal-backdrop"
+      (click)="closeAddAdmin()"
+    >
+
+      <div
+        class="modal-card"
+        (click)="
+          $event.stopPropagation()
+        "
+      >
+
+        <span class="modal-label">
+          NEW ADMINISTRATOR
+        </span>
+
+        <h2>
+          Add Admin
+        </h2>
+
+        <p>
+          Create another administrator
+          for the system.
+        </p>
+
+
+        <div class="modal-form">
+
+          <label>
+            Full Name *
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="
+              newAdmin.fullName
+            "
+          >
+
+
+          <label>
+            Email *
+          </label>
+
+          <input
+            type="email"
+            [(ngModel)]="
+              newAdmin.email
+            "
+          >
+
+
+          <label>
+            Phone
+          </label>
+
+          <input
+            type="text"
+            [(ngModel)]="
+              newAdmin.phone
+            "
+          >
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel-button"
+            type="button"
+            (click)="closeAddAdmin()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="save-button"
+            type="button"
+            (click)="saveNewAdmin()"
+          >
+            Add Admin
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- PASSWORD MODAL -->
+
+  @if (
+    passwordAdmin();
+    as admin
+  ) {
+
+    <div
+      class="modal-backdrop"
+      (click)="closePassword()"
+    >
+
+      <div
+        class="modal-card"
+        (click)="
+          $event.stopPropagation()
+        "
+      >
+
+        <span class="modal-label">
+          SECURITY
+        </span>
+
+        <h2>
+          Change Password
+        </h2>
+
+        <p>
+          Set a new password for
+          {{ admin.fullName }}.
+        </p>
+
+
+        <div class="modal-form">
+
+          <label>
+            New Password
+          </label>
+
+          <input
+            type="password"
+            [(ngModel)]="
+              newPassword
+            "
+          >
+
+
+          <label>
+            Confirm Password
+          </label>
+
+          <input
+            type="password"
+            [(ngModel)]="
+              confirmPassword
+            "
+          >
+
+        </div>
+
+
+        @if (
+          newPassword &&
+          confirmPassword &&
+          newPassword !== confirmPassword
+        ) {
+
+          <div class="password-error">
+            Passwords do not match.
+          </div>
+
+        }
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel-button"
+            type="button"
+            (click)="closePassword()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="save-button"
+            type="button"
+            [disabled]="
+              newPassword.length < 6 ||
+              newPassword !==
+              confirmPassword
+            "
+            (click)="savePassword()"
+          >
+            Change Password
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- DEACTIVATE -->
+
+  @if (
+    confirmAdmin();
+    as admin
+  ) {
+
+    <div
+      class="modal-backdrop"
+      (click)="cancelDeactivate()"
+    >
+
+      <div
+        class="modal-card"
+        (click)="
+          $event.stopPropagation()
+        "
+      >
+
+        <div class="warning-icon">
+          !
+        </div>
+
+        <h2>
+          Deactivate
+          {{ admin.fullName }}?
+        </h2>
+
+        <p>
+          This administrator will no longer
+          be able to access the admin system.
+        </p>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel-button"
+            type="button"
+            (click)="cancelDeactivate()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="confirm-danger"
+            type="button"
+            (click)="confirmDeactivate()"
+          >
+            Deactivate Admin
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

@@ -22,21 +22,21 @@ const programs = [
     ageRange: 'AGES 6–8',
     title: 'Foundations',
     description: 'Fun, structured training to build confidence and fundamental skills.',
-    image: 'assets/images/program-foundations.jpg'
+    image: 'assets/images/program-foundations.png'
   },
   {
     id: 'development',
     ageRange: 'AGES 9–12',
     title: 'Development',
     description: 'Technical skills, teamwork, and game understanding.',
-    image: 'assets/images/program-development.jpg'
+    image: 'assets/images/program-development.png'
   },
   {
     id: 'competitive',
     ageRange: 'AGES 13–16',
     title: 'Competitive',
     description: 'Advanced training for dedicated players ready for the next level.',
-    image: 'assets/images/program-competitive.jpg'
+    image: 'assets/images/program-competitive.png'
   }
 ];
 

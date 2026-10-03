@@ -1,0 +1,607 @@
+<div class="payments-page">
+
+
+  <!-- HEADER -->
+
+  <header class="page-header">
+
+    <div>
+
+      <span>
+        BILLING MANAGEMENT
+      </span>
+
+      <h1>
+        Payments
+      </h1>
+
+      <p>
+        Review collections, outstanding balances
+        and monthly payment activity.
+      </p>
+
+    </div>
+
+
+    <div class="month-selector">
+
+      <label>
+        BILLING MONTH
+      </label>
+
+
+      <select
+        [ngModel]="selectedMonth()"
+        (ngModelChange)="
+          setMonth($event)
+        "
+      >
+
+        @for (
+          month of availableMonths;
+          track month.value
+        ) {
+
+          <option
+            [value]="month.value"
+          >
+            {{ month.label }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- SUMMARY -->
+
+  <section class="payments-summary">
+
+    <article
+      class="summary-card summary-card--main"
+    >
+
+      <span>
+        COLLECTED
+      </span>
+
+      <strong>
+        ${{ totalCollected() }}
+      </strong>
+
+      <p>
+        {{ collectionRate() }}%
+        collected this month
+      </p>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        EXPECTED
+      </span>
+
+      <strong>
+        ${{ totalExpected() }}
+      </strong>
+
+      <p>
+        Monthly expected revenue
+      </p>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        OUTSTANDING
+      </span>
+
+      <strong>
+        ${{ outstanding() }}
+      </strong>
+
+      <p>
+        Still remaining
+      </p>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <span>
+        NEEDS ATTENTION
+      </span>
+
+      <strong>
+        {{
+          partialCount() +
+          unpaidCount()
+        }}
+      </strong>
+
+      <p>
+        Partial or unpaid
+      </p>
+
+    </article>
+
+  </section>
+
+
+
+  <!-- PAYMENT STATUS -->
+
+  <section class="payment-status-bar">
+
+    <button
+      type="button"
+      [class.active]="
+        statusFilter() === 'ALL'
+      "
+      (click)="setStatus('ALL')"
+    >
+      <span>
+        ALL
+      </span>
+
+      <strong>
+        {{ monthPayments().length }}
+      </strong>
+    </button>
+
+
+    <button
+      type="button"
+      class="status-paid"
+      [class.active]="
+        statusFilter() === 'PAID'
+      "
+      (click)="setStatus('PAID')"
+    >
+      <span>
+        PAID
+      </span>
+
+      <strong>
+        {{ paidCount() }}
+      </strong>
+    </button>
+
+
+    <button
+      type="button"
+      class="status-partial"
+      [class.active]="
+        statusFilter() === 'PARTIAL'
+      "
+      (click)="setStatus('PARTIAL')"
+    >
+      <span>
+        PARTIAL
+      </span>
+
+      <strong>
+        {{ partialCount() }}
+      </strong>
+    </button>
+
+
+    <button
+      type="button"
+      class="status-unpaid"
+      [class.active]="
+        statusFilter() === 'UNPAID'
+      "
+      (click)="setStatus('UNPAID')"
+    >
+      <span>
+        UNPAID
+      </span>
+
+      <strong>
+        {{ unpaidCount() }}
+      </strong>
+    </button>
+
+  </section>
+
+
+
+  <!-- FILTERS -->
+
+  <section class="payments-toolbar">
+
+    <div class="search-box">
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="6.5"
+        ></circle>
+
+        <path
+          d="m16 16 4 4"
+        ></path>
+      </svg>
+
+
+      <input
+        type="search"
+        placeholder="Search player or parent..."
+        [value]="search()"
+        (input)="
+          setSearch(
+            $any($event.target).value
+          )
+        "
+      >
+
+    </div>
+
+
+
+    <div class="amount-filter">
+
+      <label>
+        PAID LESS THAN
+      </label>
+
+      <div>
+
+        <span>
+          $
+        </span>
+
+        <input
+          type="number"
+          min="0"
+          placeholder="Amount"
+          [value]="
+            paidLessThan() ?? ''
+          "
+          (input)="
+            setPaidLessThan(
+              $any($event.target).value
+            )
+          "
+        >
+
+      </div>
+
+    </div>
+
+
+
+    <button
+      class="clear-button"
+      type="button"
+      (click)="clearFilters()"
+    >
+      Clear Filters
+    </button>
+
+
+
+    <div class="export-actions">
+
+      <button
+        class="export-secondary"
+        type="button"
+        (click)="exportUnpaid()"
+      >
+        Export Unpaid
+      </button>
+
+
+      <button
+        class="export-primary"
+        type="button"
+        (click)="exportFiltered()"
+      >
+        Export Results
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ACTIVE FILTER INFO -->
+
+  @if (
+    paidLessThan() !== null
+  ) {
+
+    <div class="active-filter">
+
+      Showing payments with less than
+
+      <strong>
+        ${{ paidLessThan() }}
+      </strong>
+
+      paid.
+
+      <button
+        type="button"
+        (click)="
+          paidLessThan.set(null)
+        "
+      >
+        ×
+      </button>
+
+    </div>
+
+  }
+
+
+
+  <!-- TABLE -->
+
+  <section class="payments-panel">
+
+
+    <div class="payments-table__header">
+
+      <span>
+        PLAYER
+      </span>
+
+      <span>
+        PARENT
+      </span>
+
+      <span>
+        EXPECTED
+      </span>
+
+      <span>
+        PAID
+      </span>
+
+      <span>
+        REMAINING
+      </span>
+
+      <span>
+        STATUS
+      </span>
+
+      <span>
+        DATE
+      </span>
+
+    </div>
+
+
+
+    @for (
+      payment of paginatedPayments();
+      track payment.id
+    ) {
+
+      <div class="payment-row">
+
+
+        <div class="player-cell">
+
+          <div class="player-avatar">
+            {{
+              playerName(payment)
+                .charAt(0)
+            }}
+          </div>
+
+
+          <div>
+
+            <strong>
+              {{
+                playerName(payment)
+              }}
+            </strong>
+
+            <span>
+              Player #{{ payment.playerId }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <span class="parent-cell">
+
+          {{
+            parentName(payment)
+          }}
+
+        </span>
+
+
+
+        <strong>
+          ${{ payment.expectedAmount }}
+        </strong>
+
+
+
+        <strong
+          [class.amount-zero]="
+            payment.paidAmount === 0
+          "
+        >
+          ${{ payment.paidAmount }}
+        </strong>
+
+
+
+        <strong
+          [class.remaining-due]="
+            remaining(payment) > 0
+          "
+        >
+          ${{ remaining(payment) }}
+        </strong>
+
+
+
+        <span
+          class="payment-badge"
+          [class.payment-badge--paid]="
+            payment.status === 'PAID'
+          "
+          [class.payment-badge--partial]="
+            payment.status === 'PARTIAL'
+          "
+          [class.payment-badge--unpaid]="
+            payment.status === 'UNPAID'
+          "
+        >
+          {{ payment.status }}
+        </span>
+
+
+
+        <span class="date-cell">
+
+          @if (
+            payment.paidAt
+          ) {
+
+            {{ payment.paidAt }}
+
+          } @else {
+
+            —
+
+          }
+
+        </span>
+
+      </div>
+
+    } @empty {
+
+      <div class="empty-state">
+
+        <div>
+          $
+        </div>
+
+        <h3>
+          No payments found
+        </h3>
+
+        <p>
+          Try changing your filters.
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- PAGINATION -->
+
+    @if (
+      filteredPayments().length > 0
+    ) {
+
+      <div class="pagination">
+
+        <div class="pagination__results">
+
+          Showing
+
+          <strong>
+            {{ firstResult() }}
+          </strong>
+
+          –
+
+          <strong>
+            {{ lastResult() }}
+          </strong>
+
+          of
+
+          <strong>
+            {{
+              filteredPayments().length
+            }}
+          </strong>
+
+          payments
+
+        </div>
+
+
+        <div class="pagination__controls">
+
+          <button
+            type="button"
+            [disabled]="page() === 1"
+            (click)="previousPage()"
+          >
+            ←
+          </button>
+
+
+          @for (
+            pageNumber of pageNumbers();
+            track pageNumber
+          ) {
+
+            <button
+              type="button"
+              [class.active]="
+                page() === pageNumber
+              "
+              (click)="
+                goToPage(pageNumber)
+              "
+            >
+              {{ pageNumber }}
+            </button>
+
+          }
+
+
+          <button
+            type="button"
+            [disabled]="
+              page() === totalPages()
+            "
+            (click)="nextPage()"
+          >
+            →
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+</div>

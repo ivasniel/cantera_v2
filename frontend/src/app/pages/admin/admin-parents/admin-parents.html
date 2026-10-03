@@ -1,0 +1,602 @@
+<div class="parents-page">
+
+
+  <!-- HEADER -->
+
+  <header class="page-header">
+
+    <div>
+
+      <span>
+        FAMILY MANAGEMENT
+      </span>
+
+      <h1>
+        Parents
+      </h1>
+
+      <p>
+        View families, associated players and
+        account status.
+      </p>
+
+    </div>
+
+
+    <div class="parent-count">
+
+      <strong>
+        {{ data.activeParents().length }}
+      </strong>
+
+      <span>
+        Active Parents
+      </span>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- FILTERS -->
+
+  <section class="parents-toolbar">
+
+    <div class="search-box">
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="6.5"
+        ></circle>
+
+        <path
+          d="m16 16 4 4"
+        ></path>
+      </svg>
+
+
+      <input
+        type="search"
+        placeholder="Search parent, email or phone..."
+        (input)="
+          setSearch(
+            $any($event.target).value
+          )
+        "
+      >
+
+    </div>
+
+
+    <div class="status-filters">
+
+      <button
+        type="button"
+        [class.active]="
+          statusFilter() === 'ALL'
+        "
+        (click)="setStatus('ALL')"
+      >
+        All
+      </button>
+
+
+      <button
+        type="button"
+        [class.active]="
+          statusFilter() === 'ACTIVE'
+        "
+        (click)="setStatus('ACTIVE')"
+      >
+        Active
+      </button>
+
+
+      <button
+        type="button"
+        [class.active]="
+          statusFilter() === 'INACTIVE'
+        "
+        (click)="setStatus('INACTIVE')"
+      >
+        Inactive
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- TABLE -->
+
+  <section class="parents-panel">
+
+
+    <div class="parents-table__header">
+
+      <span>
+        PARENT
+      </span>
+
+      <span>
+        CONTACT
+      </span>
+
+      <span>
+        PLAYERS
+      </span>
+
+      <span>
+        STATUS
+      </span>
+
+      <span></span>
+
+    </div>
+
+
+
+    @for (
+    parent of paginatedParents();
+    track parent.id
+    ) {
+      <div class="parent-record">
+
+
+        <!-- MAIN ROW -->
+
+        <div
+          class="parent-row"
+          (click)="toggleParent(parent.id)"
+        >
+
+
+          <!-- PARENT -->
+
+          <div class="parent-name">
+
+            <div class="parent-avatar">
+
+              {{
+                parent.fullName
+                  .charAt(0)
+              }}
+
+            </div>
+
+
+            <div>
+
+              <strong>
+                {{ parent.fullName }}
+              </strong>
+
+              <span>
+                Parent #{{ parent.id }}
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- CONTACT -->
+
+          <div class="parent-contact">
+
+            <strong>
+              {{ parent.email }}
+            </strong>
+
+            <span>
+              {{ parent.phone }}
+            </span>
+
+          </div>
+
+
+
+          <!-- PLAYERS -->
+
+          <div class="players-count">
+
+            <strong>
+              {{ playerCount(parent.id) }}
+            </strong>
+
+            <span>
+              {{
+                activePlayerCount(parent.id)
+              }}
+              active
+            </span>
+
+          </div>
+
+
+
+          <!-- STATUS -->
+
+          <span
+            class="status-badge"
+            [class.status-badge--inactive]="
+              parent.status === 'INACTIVE'
+            "
+          >
+
+            {{ parent.status }}
+
+          </span>
+
+
+
+          <!-- EXPAND -->
+
+          <button
+            class="expand-button"
+            type="button"
+            (click)="
+              $event.stopPropagation();
+              toggleParent(parent.id)
+            "
+          >
+
+            @if (
+              expandedParentId() ===
+              parent.id
+            ) {
+              ↑
+            } @else {
+              ↓
+            }
+
+          </button>
+
+        </div>
+
+
+
+        <!-- EXPANDED -->
+
+        @if (
+          expandedParentId() ===
+          parent.id
+        ) {
+
+          <div class="parent-details">
+
+
+            <div class="parent-details__header">
+
+              <div>
+
+                <span>
+                  ASSOCIATED PLAYERS
+                </span>
+
+                <h3>
+                  {{ parent.fullName }}
+                </h3>
+
+              </div>
+
+
+              <div class="parent-actions">
+
+                @if (
+                  parent.status === 'ACTIVE'
+                ) {
+
+                  <button
+                    class="danger-button"
+                    type="button"
+                    (click)="
+                      requestDeactivate(parent)
+                    "
+                  >
+                    Deactivate Parent
+                  </button>
+
+                } @else {
+
+                  <button
+                    class="reactivate-button"
+                    type="button"
+                    (click)="
+                      reactivate(parent)
+                    "
+                  >
+                    Reactivate Parent
+                  </button>
+
+                }
+
+              </div>
+
+            </div>
+
+
+
+            <div class="associated-players">
+
+              @for (
+                player of
+                  data.playersForParent(
+                    parent.id
+                  );
+                track player.id
+              ) {
+
+                <div class="associated-player">
+
+                  <div class="player-avatar">
+                    {{
+                      player.firstName
+                        .charAt(0)
+                    }}
+                  </div>
+
+
+                  <div class="associated-player__name">
+
+                    <strong>
+                      {{ player.firstName }}
+                      {{ player.lastName }}
+                    </strong>
+
+                    <span>
+                      {{ player.program }}
+                    </span>
+
+                  </div>
+
+
+                  <span
+                    class="mini-status"
+                    [class.mini-status--inactive]="
+                      player.status ===
+                      'INACTIVE'
+                    "
+                  >
+                    {{ player.status }}
+                  </span>
+
+                </div>
+
+              } @empty {
+
+                <div class="no-players">
+                  No players associated with this parent.
+                </div>
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    } @empty {
+
+      <div class="empty-state">
+
+        <div>
+          ♙
+        </div>
+
+        <h3>
+          No parents found
+        </h3>
+
+        <p>
+          Try changing your search or status filter.
+        </p>
+
+      </div>
+
+    }
+
+    @if (
+        filteredParents().length > 0
+        ) {
+
+        <div class="pagination">
+
+            <div class="pagination__results">
+
+            Showing
+
+            <strong>
+                {{ firstResult() }}
+            </strong>
+
+            –
+
+            <strong>
+                {{ lastResult() }}
+            </strong>
+
+            of
+
+            <strong>
+                {{ filteredParents().length }}
+            </strong>
+
+            parents
+
+            </div>
+
+
+            <div class="pagination__controls">
+
+            <button
+                class="pagination__arrow"
+                type="button"
+                aria-label="Previous page"
+                [disabled]="page() === 1"
+                (click)="previousPage()"
+            >
+                ←
+            </button>
+
+
+            @for (
+                item of [].constructor(totalPages());
+                track $index
+            ) {
+
+                <button
+                class="pagination__page"
+                type="button"
+                [class.active]="
+                    page() === $index + 1
+                "
+                (click)="
+                    goToPage(
+                    $index + 1
+                    )
+                "
+                >
+
+                {{ $index + 1 }}
+
+                </button>
+
+            }
+
+
+            <button
+                class="pagination__arrow"
+                type="button"
+                aria-label="Next page"
+                [disabled]="
+                page() === totalPages()
+                "
+                (click)="nextPage()"
+            >
+                →
+            </button>
+
+            </div>
+
+        </div>
+
+        }
+  </section>
+
+
+
+  <!-- DEACTIVATE MODAL -->
+
+  @if (
+    confirmParent();
+    as parent
+  ) {
+
+    <div
+      class="modal-backdrop"
+      (click)="cancelDeactivate()"
+    >
+
+      <div
+        class="confirm-modal"
+        (click)="
+          $event.stopPropagation()
+        "
+      >
+
+        <div class="confirm-modal__icon">
+          !
+        </div>
+
+
+        <h2>
+          Deactivate
+          {{ parent.fullName }}?
+        </h2>
+
+
+        <p>
+          This parent currently has
+          <strong>
+            {{
+              activePlayerCount(
+                parent.id
+              )
+            }}
+          </strong>
+          active player(s).
+        </p>
+
+
+        <div class="confirm-warning">
+
+          Deactivating this parent will also
+          deactivate all players associated
+          with the account.
+
+          Payment and registration history
+          will be preserved.
+
+        </div>
+
+
+        <div class="confirm-players">
+
+          @for (
+            player of
+              data.playersForParent(
+                parent.id
+              );
+            track player.id
+          ) {
+
+            <span>
+              {{ player.firstName }}
+              {{ player.lastName }}
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel-button"
+            type="button"
+            (click)="cancelDeactivate()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="confirm-danger"
+            type="button"
+            (click)="confirmDeactivate()"
+          >
+            Deactivate Parent & Players
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

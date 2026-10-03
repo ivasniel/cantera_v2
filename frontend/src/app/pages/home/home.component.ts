@@ -7,6 +7,7 @@ import { QuickRegistrationComponent } from '../../components/quick-registration/
 import { BenefitsComponent } from '../../components/benefits/benefits.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,

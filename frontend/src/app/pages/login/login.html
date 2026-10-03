@@ -1,0 +1,351 @@
+<app-header></app-header>
+
+<div class="login-page">
+
+  <div class="login-background"></div>
+
+
+  <main class="login-container">
+
+
+    <!-- =====================================
+         LEFT SIDE
+    ====================================== -->
+
+    <section class="login-welcome">
+
+      <span class="login-eyebrow">
+        LA CANTERA SOCCER ACADEMY
+      </span>
+
+      <h1>
+        Welcome
+        <span>Back.</span>
+      </h1>
+
+      <p>
+        Access your players, registrations,
+        programs and payments from one place.
+      </p>
+
+
+      <div class="login-benefits">
+
+        <div class="login-benefit">
+
+          <div class="login-benefit__icon">
+            ✓
+          </div>
+
+          <div>
+            <strong>
+              Manage Your Players
+            </strong>
+
+            <span>
+              View and update your registered players.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="login-benefit">
+
+          <div class="login-benefit__icon">
+            ✓
+          </div>
+
+          <div>
+            <strong>
+              Registration & Programs
+            </strong>
+
+            <span>
+              Review your player's program information.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="login-benefit">
+
+          <div class="login-benefit__icon">
+            ✓
+          </div>
+
+          <div>
+            <strong>
+              Payments
+            </strong>
+
+            <span>
+              Set up and manage payments when you're ready.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         LOGIN CARD
+    ====================================== -->
+
+    <section class="login-card">
+
+      <div class="login-card__header">
+
+        <span>
+          PARENT LOGIN
+        </span>
+
+        <h2>
+          Sign In
+        </h2>
+
+        <p>
+          Enter the email and password associated
+          with your La Cantera account.
+        </p>
+
+      </div>
+
+
+      <form
+        #loginForm="ngForm"
+        (ngSubmit)="login()"
+      >
+
+
+        <!-- EMAIL -->
+
+        <div class="form-field">
+
+          <label for="loginEmail">
+            Email
+          </label>
+
+          <div class="input-wrapper">
+
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="14"
+                rx="2"
+              ></rect>
+
+              <path
+                d="m4 7 8 6 8-6"
+              ></path>
+            </svg>
+
+            <input
+              id="loginEmail"
+              name="email"
+              type="email"
+              placeholder="you@email.com"
+              autocomplete="email"
+              [(ngModel)]="email"
+              required
+              email
+            >
+
+          </div>
+
+        </div>
+
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-field">
+
+          <div class="password-label">
+
+            <label for="loginPassword">
+              Password
+            </label>
+
+            <button
+              class="forgot-link"
+              type="button"
+            >
+              Forgot password?
+            </button>
+
+          </div>
+
+
+          <div class="input-wrapper">
+
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <rect
+                x="5"
+                y="10"
+                width="14"
+                height="10"
+                rx="2"
+              ></rect>
+
+              <path
+                d="M8 10V7a4 4 0 0 1 8 0v3"
+              ></path>
+            </svg>
+
+
+            <input
+              id="loginPassword"
+              name="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              [(ngModel)]="password"
+              required
+            >
+
+
+            <button
+              class="show-password"
+              type="button"
+              [attr.aria-label]="
+                showPassword()
+                  ? 'Hide password'
+                  : 'Show password'
+              "
+              (click)="togglePassword()"
+            >
+
+              @if (showPassword()) {
+
+                Hide
+
+              } @else {
+
+                Show
+
+              }
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ERROR -->
+
+        @if (error()) {
+
+          <div class="login-message login-message--error">
+
+            <span>
+              !
+            </span>
+
+            {{ error() }}
+
+          </div>
+
+        }
+
+
+
+        <!-- SUCCESS -->
+
+        @if (success()) {
+
+          <div class="login-message login-message--success">
+
+            <span>
+              ✓
+            </span>
+
+            Mock login successful.
+
+          </div>
+
+        }
+
+
+
+        <!-- SUBMIT -->
+
+        <button
+          class="login-submit"
+          type="submit"
+          [disabled]="
+            loginForm.invalid ||
+            submitting()
+          "
+        >
+
+          @if (submitting()) {
+
+            <span class="button-spinner"></span>
+
+            Signing in...
+
+          } @else {
+
+            Log In
+
+            <span>
+              →
+            </span>
+
+          }
+
+        </button>
+
+      </form>
+
+
+
+      <!-- DIVIDER -->
+
+      <div class="login-divider">
+
+        <span>
+          New to La Cantera?
+        </span>
+
+      </div>
+
+
+
+      <!-- REGISTER -->
+
+      <a
+        class="register-link"
+        routerLink="/register"
+      >
+        Register Your Player
+        <span>→</span>
+      </a>
+
+
+      <p class="login-help">
+        Need help accessing your account?
+        Contact La Cantera Soccer Academy.
+      </p>
+
+    </section>
+
+  </main>
+
+</div>

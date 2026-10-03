@@ -1,0 +1,165 @@
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+
+  <aside class="admin-sidebar">
+
+    <div class="admin-brand">
+
+      <img
+        src="/assets/images/logo.png"
+        alt="La Cantera Soccer Academy"
+      >
+
+      <div>
+
+        <strong>
+          La Cantera
+        </strong>
+
+        <span>
+          ADMIN
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <nav class="admin-nav">
+
+      <a
+  class="admin-nav__item"
+  routerLink="/admin"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{
+    exact: true
+  }"
+>
+
+  <span class="admin-nav__icon">
+    ◫
+  </span>
+
+  Overview
+
+</a>
+
+
+<a
+  class="admin-nav__item"
+  routerLink="/admin/parents"
+  routerLinkActive="active"
+>
+
+  <span class="admin-nav__icon">
+    ♙
+  </span>
+
+  Parents
+
+</a>
+
+
+<a
+  class="admin-nav__item"
+  routerLink="/admin/players"
+  routerLinkActive="active"
+>
+  <span class="admin-nav__icon">
+    ⚽
+  </span>
+
+  Players
+</a>
+
+
+<a
+  class="admin-nav__item"
+  routerLink="/admin/payments"
+  routerLinkActive="active"
+>
+  <span class="admin-nav__icon">
+    $
+  </span>
+
+  Payments
+</a>
+
+
+      <div class="admin-nav__divider"></div>
+
+
+      <a
+        class="admin-nav__item"
+        routerLink="/admin/admins"
+        routerLinkActive="active"
+      >
+        <span class="admin-nav__icon">
+          ⚙
+        </span>
+
+        Admin Users
+      </a>
+
+
+      <a
+        class="admin-nav__item"
+        routerLink="/admin/account"
+        routerLinkActive="active"
+      >
+        <span class="admin-nav__icon">
+          ○
+        </span>
+
+        My Account
+      </a>
+
+    </nav>
+
+
+    <!-- ADMIN USER -->
+
+    <div class="admin-user">
+
+      <div class="admin-user__avatar">
+        {{ auth.initials() }}
+      </div>
+
+
+      <div class="admin-user__info">
+
+        <strong>
+          {{ auth.user()?.fullName }}
+        </strong>
+
+        <span>
+          Administrator
+        </span>
+
+      </div>
+
+
+      <button
+        class="admin-user__logout"
+        type="button"
+        title="Log out"
+        (click)="logout()"
+      >
+        ↪
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- CONTENT -->
+
+  <main class="admin-main">
+
+    <router-outlet></router-outlet>
+
+  </main>
+
+</div>

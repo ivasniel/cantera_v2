@@ -1,0 +1,550 @@
+<div class="players-page">
+
+
+  <!-- HEADER -->
+
+  <header class="page-header">
+
+    <div>
+
+      <span>
+        PLAYER MANAGEMENT
+      </span>
+
+      <h1>
+        Players
+      </h1>
+
+      <p>
+        View, edit and manage every player
+        registered with La Cantera.
+      </p>
+
+    </div>
+
+
+    <div class="players-count">
+
+      <strong>
+        {{ data.activePlayers().length }}
+      </strong>
+
+      <span>
+        Active Players
+      </span>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- TOOLBAR -->
+
+  <section class="players-toolbar">
+
+    <div class="search-box">
+
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="6.5"
+        ></circle>
+
+        <path
+          d="m16 16 4 4"
+        ></path>
+      </svg>
+
+      <input
+        type="search"
+        placeholder="Search player or parent..."
+        (input)="
+          setSearch(
+            $any($event.target).value
+          )
+        "
+      >
+
+    </div>
+
+
+    <div class="toolbar-selects">
+
+      <select
+        [ngModel]="programFilter()"
+        (ngModelChange)="
+          setProgram($event)
+        "
+      >
+        <option value="ALL">
+          All Programs
+        </option>
+
+        <option value="Foundations">
+          Foundations
+        </option>
+
+        <option value="Development">
+          Development
+        </option>
+
+        <option value="Competitive">
+          Competitive
+        </option>
+      </select>
+
+
+      <select
+        [ngModel]="statusFilter()"
+        (ngModelChange)="
+          setStatus($event)
+        "
+      >
+        <option value="ALL">
+          All Status
+        </option>
+
+        <option value="ACTIVE">
+          Active
+        </option>
+
+        <option value="INACTIVE">
+          Inactive
+        </option>
+      </select>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- TABLE -->
+
+  <section class="players-panel">
+
+    <div class="players-table__header">
+
+      <span>
+        PLAYER
+      </span>
+
+      <span>
+        PARENT
+      </span>
+
+      <span>
+        PROGRAM
+      </span>
+
+      <span>
+        STATUS
+      </span>
+
+      <span>
+        ACTIONS
+      </span>
+
+    </div>
+
+
+    @for (
+      player of paginatedPlayers();
+      track player.id
+    ) {
+
+      <div class="player-record">
+
+
+        @if (
+          editingPlayerId() !==
+          player.id
+        ) {
+
+          <div class="player-row">
+
+            <div class="player-name">
+
+              <div class="player-avatar">
+
+                {{
+                  player.firstName
+                    .charAt(0)
+                }}
+
+              </div>
+
+
+              <div>
+
+                <strong>
+                  {{ player.firstName }}
+                  {{ player.lastName }}
+                </strong>
+
+                <span>
+                  Player #{{ player.id }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="parent-name">
+
+              <strong>
+                {{
+                  parentName(
+                    player.id
+                  )
+                }}
+              </strong>
+
+            </div>
+
+
+            <span class="program-badge">
+
+              {{ player.program }}
+
+            </span>
+
+
+            <span
+              class="status-badge"
+              [class.status-badge--inactive]="
+                player.status ===
+                'INACTIVE'
+              "
+            >
+              {{ player.status }}
+            </span>
+
+
+            <div class="player-actions">
+
+              <button
+                class="edit-button"
+                type="button"
+                (click)="
+                  editPlayer(
+                    player.id
+                  )
+                "
+              >
+                Edit
+              </button>
+
+
+              @if (
+                player.status ===
+                'ACTIVE'
+              ) {
+
+                <button
+                  class="deactivate-button"
+                  type="button"
+                  (click)="
+                    requestDeactivate(
+                      player
+                    )
+                  "
+                >
+                  Deactivate
+                </button>
+
+              } @else {
+
+                <button
+                  class="reactivate-button"
+                  type="button"
+                  (click)="
+                    reactivate(player)
+                  "
+                >
+                  Reactivate
+                </button>
+
+              }
+
+            </div>
+
+          </div>
+
+        } @else {
+
+
+          <!-- EDIT -->
+
+          <div class="player-edit-row">
+
+            <div class="edit-field">
+
+              <label>
+                First Name
+              </label>
+
+              <input
+                type="text"
+                [(ngModel)]="
+                  player.firstName
+                "
+              >
+
+            </div>
+
+
+            <div class="edit-field">
+
+              <label>
+                Last Name
+              </label>
+
+              <input
+                type="text"
+                [(ngModel)]="
+                  player.lastName
+                "
+              >
+
+            </div>
+
+
+            <div class="edit-field">
+
+              <label>
+                Program
+              </label>
+
+              <select
+                [(ngModel)]="
+                  player.program
+                "
+              >
+                <option>
+                  Foundations
+                </option>
+
+                <option>
+                  Development
+                </option>
+
+                <option>
+                  Competitive
+                </option>
+              </select>
+
+            </div>
+
+
+            <div class="edit-actions">
+
+              <button
+                class="cancel-button"
+                type="button"
+                (click)="
+                  editingPlayerId.set(null)
+                "
+              >
+                Cancel
+              </button>
+
+
+              <button
+                class="save-button"
+                type="button"
+                (click)="
+                  savePlayer(player)
+                "
+              >
+                Save Changes
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    } @empty {
+
+      <div class="empty-state">
+
+        <div>
+          ⚽
+        </div>
+
+        <h3>
+          No players found
+        </h3>
+
+        <p>
+          Try changing your search or filters.
+        </p>
+
+      </div>
+
+    }
+
+
+
+    <!-- PAGINATION -->
+
+    @if (
+      filteredPlayers().length > 0
+    ) {
+
+      <div class="pagination">
+
+        <div class="pagination__results">
+
+          Showing
+
+          <strong>
+            {{ firstResult() }}
+          </strong>
+
+          –
+
+          <strong>
+            {{ lastResult() }}
+          </strong>
+
+          of
+
+          <strong>
+            {{
+              filteredPlayers().length
+            }}
+          </strong>
+
+          players
+
+        </div>
+
+
+        <div class="pagination__controls">
+
+          <button
+            type="button"
+            [disabled]="page() === 1"
+            (click)="previousPage()"
+          >
+            ←
+          </button>
+
+
+          @for (
+            pageNumber of pageNumbers();
+            track pageNumber
+          ) {
+
+            <button
+              type="button"
+              [class.active]="
+                page() === pageNumber
+              "
+              (click)="
+                goToPage(pageNumber)
+              "
+            >
+              {{ pageNumber }}
+            </button>
+
+          }
+
+
+          <button
+            type="button"
+            [disabled]="
+              page() === totalPages()
+            "
+            (click)="nextPage()"
+          >
+            →
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+
+
+  <!-- CONFIRM DEACTIVATE -->
+
+  @if (
+    confirmPlayer();
+    as player
+  ) {
+
+    <div
+      class="modal-backdrop"
+      (click)="cancelDeactivate()"
+    >
+
+      <div
+        class="confirm-modal"
+        (click)="
+          $event.stopPropagation()
+        "
+      >
+
+        <div class="confirm-icon">
+          !
+        </div>
+
+
+        <h2>
+          Deactivate
+          {{ player.firstName }}
+          {{ player.lastName }}?
+        </h2>
+
+
+        <p>
+          This player will no longer be considered
+          active, but registration and payment
+          history will be preserved.
+        </p>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="cancel-button"
+            type="button"
+            (click)="cancelDeactivate()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="confirm-danger"
+            type="button"
+            (click)="confirmDeactivate()"
+          >
+            Deactivate Player
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

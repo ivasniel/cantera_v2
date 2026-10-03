@@ -1,0 +1,472 @@
+<div class="admin-dashboard">
+
+  <!-- HEADER -->
+
+  <header class="admin-header">
+
+    <div>
+
+      <span class="admin-eyebrow">
+        ADMIN DASHBOARD
+      </span>
+
+      <h1>
+        Academy Overview
+      </h1>
+
+      <p>
+        Monitor players, families and payments
+        across La Cantera.
+      </p>
+
+    </div>
+
+
+    <div class="month-selector">
+
+      <label>
+        BILLING MONTH
+      </label>
+
+      <select>
+
+        <option value="2026-10">
+          October 2026
+        </option>
+
+      </select>
+
+    </div>
+
+  </header>
+
+
+  <!-- MAIN STATS -->
+
+  <section class="admin-stats">
+
+    <article class="stat-card stat-card--money">
+
+      <span>
+        COLLECTED THIS MONTH
+      </span>
+
+      <strong>
+        ${{ totalCollected() }}
+      </strong>
+
+      <p>
+        {{ collectionRate() }}%
+        of expected revenue
+      </p>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <span>
+        OUTSTANDING
+      </span>
+
+      <strong>
+        ${{ outstanding() }}
+      </strong>
+
+      <p>
+        Remaining this month
+      </p>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <span>
+        ACTIVE PARENTS
+      </span>
+
+      <strong>
+        {{ activeParents().length }}
+      </strong>
+
+      <p>
+        Registered families
+      </p>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <span>
+        ACTIVE PLAYERS
+      </span>
+
+      <strong>
+        {{ activePlayers().length }}
+      </strong>
+
+      <p>
+        Currently enrolled
+      </p>
+
+    </article>
+
+  </section>
+
+
+  <!-- PAYMENT SUMMARY -->
+
+  <section class="overview-grid">
+
+
+    <article class="panel payment-overview">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span>
+            MONTHLY COLLECTION
+          </span>
+
+          <h2>
+            Payment Status
+          </h2>
+
+        </div>
+
+
+        <strong class="collection-percent">
+          {{ collectionRate() }}%
+        </strong>
+
+      </div>
+
+
+      <div class="progress">
+
+        <div
+          class="progress__fill"
+          [style.width.%]="collectionRate()"
+        ></div>
+
+      </div>
+
+
+      <div class="payment-status-grid">
+
+
+        <div class="payment-status">
+
+          <span class="status-dot status-dot--paid"></span>
+
+          <div>
+
+            <strong>
+              {{ paidCount() }}
+            </strong>
+
+            <span>
+              Paid
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="payment-status">
+
+          <span class="status-dot status-dot--partial"></span>
+
+          <div>
+
+            <strong>
+              {{ partialCount() }}
+            </strong>
+
+            <span>
+              Partial
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="payment-status">
+
+          <span class="status-dot status-dot--unpaid"></span>
+
+          <div>
+
+            <strong>
+              {{ unpaidCount() }}
+            </strong>
+
+            <span>
+              Unpaid
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="money-summary">
+
+        <div>
+
+          <span>
+            EXPECTED
+          </span>
+
+          <strong>
+            ${{ totalExpected() }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            COLLECTED
+          </span>
+
+          <strong>
+            ${{ totalCollected() }}
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <span>
+            OUTSTANDING
+          </span>
+
+          <strong>
+            ${{ outstanding() }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+
+    <!-- QUICK STATUS -->
+
+    <article class="panel quick-status">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span>
+            ACADEMY STATUS
+          </span>
+
+          <h2>
+            Quick Summary
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="quick-row">
+
+        <div>
+          Active Parents
+        </div>
+
+        <strong>
+          {{ activeParents().length }}
+        </strong>
+
+      </div>
+
+
+      <div class="quick-row">
+
+        <div>
+          Active Players
+        </div>
+
+        <strong>
+          {{ activePlayers().length }}
+        </strong>
+
+      </div>
+
+
+      <div class="quick-row">
+
+        <div>
+          Inactive Players
+        </div>
+
+        <strong>
+          {{
+            players().length -
+            activePlayers().length
+          }}
+        </strong>
+
+      </div>
+
+
+      <div class="quick-row quick-row--warning">
+
+        <div>
+          Payments Requiring Attention
+        </div>
+
+        <strong>
+          {{
+            partialCount() +
+            unpaidCount()
+          }}
+        </strong>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+
+  <!-- ATTENTION -->
+
+  <section class="panel attention-panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <span>
+          REQUIRES ATTENTION
+        </span>
+
+        <h2>
+          Outstanding Payments
+        </h2>
+
+        <p>
+          Players who have not completed their
+          payment for this month.
+        </p>
+
+      </div>
+
+
+      <button
+        class="export-button"
+        type="button"
+      >
+        Export Unpaid
+      </button>
+
+    </div>
+
+
+    <div class="admin-table">
+
+      <div class="admin-table__header">
+
+        <span>
+          PLAYER
+        </span>
+
+        <span>
+          PARENT
+        </span>
+
+        <span>
+          EXPECTED
+        </span>
+
+        <span>
+          PAID
+        </span>
+
+        <span>
+          REMAINING
+        </span>
+
+        <span>
+          STATUS
+        </span>
+
+      </div>
+
+
+      @for (
+        payment of attentionPayments();
+        track payment.id
+      ) {
+
+        <div class="admin-table__row">
+
+          <strong>
+            {{ playerName(payment.playerId) }}
+          </strong>
+
+
+          <span>
+            {{ parentName(payment.playerId) }}
+          </span>
+
+
+          <span>
+            ${{ payment.expectedAmount }}
+          </span>
+
+
+          <span>
+            ${{ payment.paidAmount }}
+          </span>
+
+
+          <strong>
+            ${{
+              payment.expectedAmount -
+              payment.paidAmount
+            }}
+          </strong>
+
+
+          <span
+            class="payment-badge"
+            [class.payment-badge--partial]="
+              payment.status === 'PARTIAL'
+            "
+            [class.payment-badge--unpaid]="
+              payment.status === 'UNPAID'
+            "
+          >
+
+            {{ payment.status }}
+
+          </span>
+
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+</div>

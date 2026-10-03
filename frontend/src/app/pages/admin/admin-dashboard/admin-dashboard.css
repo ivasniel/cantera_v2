@@ -1,0 +1,646 @@
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.admin-dashboard {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+}
+
+
+/* HEADER */
+
+.admin-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+}
+
+.admin-eyebrow {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #ff3038;
+
+  font:
+    800 10px/1
+    'Inter',
+    sans-serif;
+
+  letter-spacing: 1.8px;
+}
+
+.admin-header h1 {
+  margin: 0;
+
+  color: #102a4b;
+
+  font:
+    900 34px/1
+    'Nunito Sans',
+    sans-serif;
+}
+
+.admin-header p {
+  margin: 9px 0 0;
+
+  color: #7b8b9c;
+
+  font:
+    500 13px/1.5
+    'Inter',
+    sans-serif;
+}
+
+
+/* MONTH */
+
+.month-selector {
+  min-width: 190px;
+}
+
+.month-selector label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #8998a7;
+
+  font:
+    800 8px/1
+    'Inter',
+    sans-serif;
+
+  letter-spacing: 1.3px;
+}
+
+.month-selector select {
+  width: 100%;
+  height: 43px;
+
+  padding: 0 12px;
+
+  color: #102a4b;
+
+  background: #fff;
+
+  border:
+    1px solid #dce5ed;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  font:
+    700 11px/1
+    'Inter',
+    sans-serif;
+}
+
+
+/* STATS */
+
+.admin-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 17px;
+
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  position: relative;
+
+  overflow: hidden;
+
+  min-height: 145px;
+
+  padding: 24px;
+
+  background: #fff;
+
+  border:
+    1px solid #e1e8ef;
+
+  border-radius: 18px;
+}
+
+.stat-card > span {
+  display: block;
+
+  color: #8d9baa;
+
+  font:
+    800 8px/1
+    'Inter',
+    sans-serif;
+
+  letter-spacing: 1.4px;
+}
+
+.stat-card > strong {
+  display: block;
+
+  margin-top: 18px;
+
+  color: #102a4b;
+
+  font:
+    900 29px/1
+    'Nunito Sans',
+    sans-serif;
+}
+
+.stat-card p {
+  margin: 8px 0 0;
+
+  color: #8a99a8;
+
+  font:
+    500 10px/1.4
+    'Inter',
+    sans-serif;
+}
+
+.stat-card--money {
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #092d52,
+      #105586
+    );
+
+  border: 0;
+}
+
+.stat-card--money > span,
+.stat-card--money > strong,
+.stat-card--money p {
+  color: #fff;
+}
+
+.stat-card--money > span,
+.stat-card--money p {
+  opacity: .72;
+}
+
+
+/* PANELS */
+
+.overview-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.5fr .8fr;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+}
+
+.panel {
+  padding: 26px;
+
+  background: #fff;
+
+  border:
+    1px solid #e1e8ef;
+
+  border-radius: 19px;
+}
+
+.panel-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.panel-header > div > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #ff3038;
+
+  font:
+    800 8px/1
+    'Inter',
+    sans-serif;
+
+  letter-spacing: 1.4px;
+}
+
+.panel-header h2 {
+  margin: 0;
+
+  color: #102a4b;
+
+  font:
+    900 20px/1
+    'Nunito Sans',
+    sans-serif;
+}
+
+.panel-header p {
+  margin: 7px 0 0;
+
+  color: #8493a2;
+
+  font:
+    500 11px/1.5
+    'Inter',
+    sans-serif;
+}
+
+.collection-percent {
+  color: #1bb56a;
+
+  font:
+    900 23px/1
+    'Nunito Sans',
+    sans-serif;
+}
+
+
+/* PROGRESS */
+
+.progress {
+  height: 10px;
+
+  overflow: hidden;
+
+  background: #ecf0f4;
+
+  border-radius: 99px;
+}
+
+.progress__fill {
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #20bf6b,
+      #42d78c
+    );
+
+  border-radius: 99px;
+}
+
+
+/* PAYMENT STATUS */
+
+.payment-status-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+
+  margin: 25px 0;
+}
+
+.payment-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 15px;
+
+  background: #f8fafc;
+
+  border-radius: 13px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+}
+
+.status-dot--paid {
+  background: #1dbb6a;
+}
+
+.status-dot--partial {
+  background: #f1a127;
+}
+
+.status-dot--unpaid {
+  background: #ee3f48;
+}
+
+.payment-status strong,
+.payment-status span {
+  display: block;
+}
+
+.payment-status strong {
+  color: #102a4b;
+
+  font:
+    900 18px/1
+    'Nunito Sans',
+    sans-serif;
+}
+
+.payment-status div span {
+  margin-top: 4px;
+
+  color: #8796a5;
+
+  font-size: 9px;
+}
+
+
+/* MONEY */
+
+.money-summary {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  padding-top: 20px;
+
+  border-top:
+    1px solid #e9edf2;
+}
+
+.money-summary > div {
+  padding: 0 15px;
+
+  border-right:
+    1px solid #e9edf2;
+}
+
+.money-summary > div:first-child {
+  padding-left: 0;
+}
+
+.money-summary > div:last-child {
+  border-right: 0;
+}
+
+.money-summary span,
+.money-summary strong {
+  display: block;
+}
+
+.money-summary span {
+  color: #99a5b1;
+
+  font:
+    800 7px/1
+    'Inter',
+    sans-serif;
+
+  letter-spacing: 1.1px;
+}
+
+.money-summary strong {
+  margin-top: 7px;
+
+  color: #314a61;
+
+  font:
+    800 15px/1
+    'Inter',
+    sans-serif;
+}
+
+
+/* QUICK STATUS */
+
+.quick-row {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  min-height: 48px;
+
+  padding: 0 3px;
+
+  color: #53687d;
+
+  border-bottom:
+    1px solid #edf1f4;
+
+  font:
+    600 11px/1
+    'Inter',
+    sans-serif;
+}
+
+.quick-row:last-child {
+  border-bottom: 0;
+}
+
+.quick-row strong {
+  color: #102a4b;
+
+  font:
+    900 15px/1
+    'Nunito Sans',
+    sans-serif;
+}
+
+.quick-row--warning strong {
+  color: #e39521;
+}
+
+
+/* TABLE */
+
+.attention-panel {
+  margin-bottom: 30px;
+}
+
+.export-button {
+  min-height: 40px;
+
+  padding: 0 15px;
+
+  color: #102a4b;
+
+  background: #fff;
+
+  border:
+    1px solid #d8e1e9;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font:
+    800 10px/1
+    'Inter',
+    sans-serif;
+}
+
+.admin-table {
+  overflow-x: auto;
+}
+
+.admin-table__header,
+.admin-table__row {
+  min-width: 800px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.3fr
+    1.3fr
+    .75fr
+    .75fr
+    .8fr
+    .8fr;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.admin-table__header {
+  min-height: 38px;
+
+  color: #9aa6b1;
+
+  border-bottom:
+    1px solid #e8edf2;
+
+  font:
+    800 7px/1
+    'Inter',
+    sans-serif;
+
+  letter-spacing: 1px;
+}
+
+.admin-table__row {
+  min-height: 58px;
+
+  color: #687a8c;
+
+  border-bottom:
+    1px solid #eef2f5;
+
+  font:
+    500 10px/1.3
+    'Inter',
+    sans-serif;
+}
+
+.admin-table__row:last-child {
+  border-bottom: 0;
+}
+
+.admin-table__row > strong {
+  color: #273f56;
+
+  font-weight: 800;
+}
+
+
+/* BADGES */
+
+.payment-badge {
+  width: fit-content;
+
+  padding: 7px 10px;
+
+  border-radius: 99px;
+
+  font:
+    800 8px/1
+    'Inter',
+    sans-serif;
+}
+
+.payment-badge--partial {
+  color: #a96a0a;
+
+  background: #fff3df;
+}
+
+.payment-badge--unpaid {
+  color: #bd3038;
+
+  background: #ffebed;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+  .admin-stats {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .admin-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .month-selector {
+    width: 100%;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .money-summary {
+    gap: 14px;
+
+    grid-template-columns: 1fr;
+  }
+
+  .money-summary > div {
+    padding: 0;
+
+    border-right: 0;
+  }
+
+}
